@@ -1,0 +1,20 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+version = "0.1.0"
+description = ""
+name = "noisy-nonlinear"
+authors = ["Christoph Hansknecht <c.hansknecht@tu-braunschweig.de>"]
+packages = [{include = "noisy_nonlinear"}]
+
+[tool.poetry.dependencies]
+python = ">=3.8"
+coloredlogs = "^15.0.1"
+ipopt = "^1.0.3"
+numpy = "^1.24.0"
+pandas = "^1.5.2"
+scipy = "^1.9.3"
+matplotlib = "^3.6.2"
+Pillow = "^9.3.0"
