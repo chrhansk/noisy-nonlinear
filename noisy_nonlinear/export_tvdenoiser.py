@@ -140,6 +140,7 @@ def print_required_stabilizations():
 
 
 if __name__ == "__main__":
+    from multiprocessing import Pool, cpu_count
     import coloredlogs
     coloredlogs.install()
     logger.info("Exporting tvdenoiser data")
@@ -148,5 +149,5 @@ if __name__ == "__main__":
 
     solve_and_export_orig()
 
-    for noise_level in noise_levels:
-        solve_and_export(noise_level)
+    with Pool(cpu_count()) as pool:
+        pool.map(solve_and_export, noise_levels)
