@@ -3,6 +3,7 @@ from PIL import Image
 from math import sqrt
 
 from noisy_nonlinear.func import Func
+from noisy_nonlinear.sampling import sample_uniform
 
 default_seed = 42
 
@@ -21,9 +22,10 @@ class Denoiser(Func):
     def _noisy_image(self):
         level = self.noise_level
 
-        noise = self._rng.uniform(low=-level,
-                                  high=level,
-                                  size=self.image.shape)
+        noise = sample_uniform(self._rng,
+                               low=-level,
+                               high=level,
+                               size=self.image.shape)
 
         return np.clip(self.image + noise, 0., 1.)
 

@@ -1,6 +1,8 @@
 import numpy as np
 import scipy.sparse
 
+from noisy_nonlinear.sampling import sample_ball
+
 default_seed = 42
 
 
@@ -206,15 +208,13 @@ class NoisyFunc(Func):
         value = np.atleast_1d(value)
         dim = value.size
 
-        noise = self._random.multivariate_normal(np.ones((dim,)),
-                                                 np.eye(dim))
-
-        noise = noise.reshape(*value.shape)
+        noise = sample_ball(self._random, dim, error_bound)
 
         norm = np.linalg.norm(noise, ord=2)
 
-        if norm != 0.:
-            noise *= error_bound / norm
+        assert (norm <= error_bound) or np.allclose(norm, error_bound)
+
+        noise = noise.reshape(value.shape)
 
         return value + noise
 

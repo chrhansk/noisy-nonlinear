@@ -86,11 +86,6 @@ class HS71(Func):
 
         return (rows, cols)
 
-    # def hess_values(self, v)
-
-    # def hess_struct(self)
-
-
     # everything is an inequality except
     # for the first equation
     def num_ieq(self):
