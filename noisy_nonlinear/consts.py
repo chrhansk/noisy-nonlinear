@@ -16,10 +16,10 @@ def const_A(params,
             dim):
     gamma = const_gamma(dim)
 
-    return min(params.theta * gamma,
+    return min(params.theta,
+               params.kappa_l,
                params.delta_0,
-               params.delta_lp_0 * gamma,
-               gamma / params.delta_lp_max)
+               params.delta_lp_0 * gamma)
 
 
 def const_m_eps_0(func, lip_omega):
@@ -40,7 +40,7 @@ def stabilization(func, penalty, params):
     m_eps_0 = const_m_eps_0(func, lip_omega)
     m_eps_1 = const_m_eps_1(func, lip_omega)
 
-    return (m_eps_0 + m_eps_1) / (1. - params.rho_u)
+    return (m_eps_0 + m_eps_1) / (1. - params.rho_s)
 
 
 def const_B(func,
@@ -51,18 +51,23 @@ def const_B(func,
     lip_omega = const_lip_omega(penalty, func.num_cons())
     m_eps_2 = const_m_eps_2(lip_deriv, lip_omega, params.beta)
 
-    l_lin = gamma*lip_omega*(lip_deriv + func.value_error())
+    l_lin = gamma * lip_omega * (lip_deriv + func.value_error())
 
-    min_1 = (1 - params.rho_u) * params.cauchy_eta / \
-        (gamma * m_eps_2 * params.delta_lp_max) * \
-        min(params.theta**2, params.kappa_u**2)
+    min_1 = (params.theta**2 * (1 - params.rho_u) * params.cauchy_eta) / \
+        (gamma * m_eps_2 * params.delta_lp_max)
 
-    min_2 = gamma / l_lin
+    min_2 = (params.kappa_l**2 * (1 - params.rho_s) * params.cauchy_eta) / \
+        (gamma * m_eps_2 * params.delta_lp_max)
 
-    min_3 = 2*(1 - params.cauchy_eta)*params.cauchy_tau / \
+    min_3 = gamma / l_lin
+
+    min_4 = 2*(1 - params.cauchy_eta)*params.cauchy_tau / \
         (params.beta*gamma*params.delta_lp_max)
 
-    return min(min_1, min_2, min_3)
+    return min(min_1,
+               min_2,
+               min_3,
+               min_4)
 
 
 def const_delta(func,
