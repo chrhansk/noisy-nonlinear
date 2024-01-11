@@ -48,7 +48,7 @@ if __name__ == "__main__":
     coloredlogs.install(level=logging.DEBUG)
     logger.info("Exporting quad data")
 
-    failing_seed = 6
+    failing_seed = 2
 
     value_error = 1e-1
     deriv_error = 1e-5
